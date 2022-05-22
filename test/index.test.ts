@@ -14,21 +14,21 @@ describe('TransportFetch', () => {
         const r = new Error('message');
         mockedFetch.mockRejectedValue(r);
 
-        return expect(transport.post(new URL('http://example.com/'), '', {})).rejects.toThrow(NetworkError);
+        return expect(transport.post(new URL('http://example.com/'), '', {}, 15000)).rejects.toThrow(NetworkError);
     });
 
     it('should throw HttpError on HTTP error (1)', () => {
         const r = new Response('Ignored', { status: 404, statusText: 'Not Found' });
         mockedFetch.mockResolvedValue(r);
 
-        return expect(transport.post(new URL('http://example.com/'), '', {})).rejects.toThrow(HttpError);
+        return expect(transport.post(new URL('http://example.com/'), '', {}, 15000)).rejects.toThrow(HttpError);
     });
 
     it('should throw HttpError on HTTP error (2)', () => {
         const r = new Response('Ignored', { status: 404, statusText: 'Not Found' });
         mockedFetch.mockResolvedValue(r);
 
-        return expect(transport.post(new URL('http://example.com/'), '', {})).rejects.toMatchObject({
+        return expect(transport.post(new URL('http://example.com/'), '', {}, 15000)).rejects.toMatchObject({
             code: 404,
             statusText: 'Not Found',
             body: 'Ignored',
@@ -40,7 +40,7 @@ describe('TransportFetch', () => {
         r.text = jest.fn().mockRejectedValue(new Error('Unknown error'));
         mockedFetch.mockResolvedValue(r);
 
-        return expect(transport.post(new URL('http://example.com/'), '', {})).rejects.toMatchObject({
+        return expect(transport.post(new URL('http://example.com/'), '', {}, 15000)).rejects.toMatchObject({
             code: 400,
             statusText: 'Bad, Bad Request',
             body: '',
@@ -52,6 +52,6 @@ describe('TransportFetch', () => {
         r.text = jest.fn().mockRejectedValue(new Error('Unknown error'));
         mockedFetch.mockResolvedValue(r);
 
-        return expect(transport.post(new URL('http://example.com/'), '', {})).rejects.toThrow(FaceXError);
+        return expect(transport.post(new URL('http://example.com/'), '', {}, 15000)).rejects.toThrow(FaceXError);
     });
 });
