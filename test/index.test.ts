@@ -1,11 +1,11 @@
-import * as f from '@adobe/helix-fetch';
+import * as f from '@adobe/fetch';
 import { FaceXError, HttpError, NetworkError } from '@myrotvorets/facex-base';
 import { TransportFetch } from '../lib';
 
-jest.mock('@adobe/helix-fetch');
+jest.mock('@adobe/fetch');
 
 const mockedFetch = f.fetch as jest.MockedFunction<typeof f.fetch>; // NOSONAR
-const { Response } = jest.requireActual<typeof f>('@adobe/helix-fetch');
+const { Response } = jest.requireActual<typeof f>('@adobe/fetch');
 
 describe('TransportFetch', () => {
     const transport = new TransportFetch();

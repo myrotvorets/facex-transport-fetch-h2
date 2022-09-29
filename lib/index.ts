@@ -1,4 +1,4 @@
-import { Response, fetch, timeoutSignal } from '@adobe/helix-fetch';
+import { Response, fetch, timeoutSignal } from '@adobe/fetch';
 import { FaceXError, HttpError, IRemoteTransport, NetworkError } from '@myrotvorets/facex-base';
 
 export class TransportFetch implements IRemoteTransport {
