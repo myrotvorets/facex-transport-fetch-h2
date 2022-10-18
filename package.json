@@ -22,7 +22,7 @@
   "license": "MIT",
   "devDependencies": {
     "@myrotvorets/eslint-config-myrotvorets-ts": "^2.2.5",
-    "@myrotvorets/facex-base": "^1.2.0",
+    "@myrotvorets/facex-base": "^2.0.0",
     "@types/jest": "^29.0.0",
     "@types/node": ">= 12",
     "eslint-formatter-gha": "^1.2.0",
