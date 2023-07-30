@@ -5,7 +5,9 @@ import { TransportFetch } from '../lib';
 jest.mock('@adobe/fetch');
 
 const mockedFetch = f.fetch as jest.MockedFunction<typeof f.fetch>; // NOSONAR
-const { Response } = jest.requireActual<typeof f>('@adobe/fetch');
+const { Response, timeoutSignal } = jest.requireActual<typeof f>('@adobe/fetch');
+
+(f.timeoutSignal as jest.MockedFunction<typeof f.timeoutSignal>).mockImplementation((ms) => timeoutSignal(ms));
 
 describe('TransportFetch', () => {
     const transport = new TransportFetch();
