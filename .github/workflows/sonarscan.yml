@@ -9,8 +9,12 @@ on:
       - master
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 env:
   SONARSCANNER: "true"
+  COLLECT_COVERAGE: "1"
 
 jobs:
   build:
@@ -21,47 +25,7 @@ jobs:
       github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name && github.event.sender.login != 'dependabot[bot]' ||
       github.event_name == 'push' && !contains(github.event.head_commit.message, '[ci skip]')
     steps:
-      - name: Check out the source code
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - name: Run SonarCloud analysis
+        uses: myrotvorets/composite-actions/node-sonarscan@master
         with:
-          fetch-depth: 0
-
-      - name: Set up Node.js environment
-        uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3.8.1
-        with:
-          node-version: lts/*
-          registry-url: https://npm.pkg.github.com
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci --ignore-scripts
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Run postinstall scripts
-        run: npm rebuild && npm run prepare --if-present
-
-      - name: Run tests
-        run: npm test
-        env:
-          COLLECT_COVERAGE: "1"
-
-      - name: Retrieve information from package.json
-        uses: myrotvorets/info-from-package-json-action@8e669c68fee193af17ffe3c9e6a028acd6616768 # tag=1.2.0
-        id: ver
-
-      - name: Fix paths in test-report.xml
-        run: sed -i "s@$(pwd)@/github/workspace@g" test-report.xml
-
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectName=${{ steps.ver.outputs.packageName }}
-            -Dsonar.projectVersion=${{ steps.ver.outputs.packageVersion }}
-            -Dsonar.links.homepage=${{ steps.ver.outputs.packageHomepage }}
-            -Dsonar.links.issue=${{ steps.ver.outputs.packageBugsUrl }}
-            -Dsonar.links.scm=${{ steps.ver.outputs.packageScmUrl }}
+          sonar-token: ${{ secrets.SONAR_TOKEN }}
