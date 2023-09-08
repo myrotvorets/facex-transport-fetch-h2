@@ -20,6 +20,9 @@ jobs:
   build:
     name: SonarCloud Scan
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
     if: |
       github.event_name == 'workflow_dispatch' ||
       github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name && github.event.sender.login != 'dependabot[bot]' ||
@@ -29,3 +32,4 @@ jobs:
         uses: myrotvorets/composite-actions/node-sonarscan@master
         with:
           sonar-token: ${{ secrets.SONAR_TOKEN }}
+          registry-url: https://npm.pkg.github.com
