@@ -23,15 +23,15 @@ export class TransportFetch implements IRemoteTransport {
     private static _fetch(url: URL, body: string, headers: Record<string, string>, timeout: number): Promise<Response> {
         const signal = timeoutSignal(timeout);
         return fetch(url.toString(), { method: 'POST', body, headers, signal })
-            .catch((e: Error) => {
-                throw new NetworkError(e.message);
+            .catch((e: unknown) => {
+                throw new NetworkError((e as Error).message);
             })
             .finally(() => signal.clear());
     }
 
     private static _getText(r: Response): Promise<string> {
-        return r.text().catch((e: Error) => {
-            throw new FaceXError(e.message);
+        return r.text().catch((e: unknown) => {
+            throw new FaceXError((e as Error).message);
         });
     }
 }
