@@ -1,6 +1,6 @@
 {
   "name": "@myrotvorets/facex-transport-fetch-h2",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "description": "fetch-h2/helix-fetch transport for FaceX",
   "main": "dist/lib/index.js",
   "scripts": {
