@@ -1,5 +1,5 @@
-import { Response, fetch, timeoutSignal } from '@adobe/fetch';
-import { FaceXError, HttpError, IRemoteTransport, NetworkError } from '@myrotvorets/facex-base';
+import { type Response, fetch, timeoutSignal } from '@adobe/fetch';
+import { FaceXError, HttpError, type IRemoteTransport, NetworkError } from '@myrotvorets/facex-base';
 
 export class TransportFetch implements IRemoteTransport {
     // eslint-disable-next-line class-methods-use-this
@@ -11,6 +11,7 @@ export class TransportFetch implements IRemoteTransport {
             try {
                 err.body = await r.text();
             } catch (e) {
+                err.cause = e;
                 err.body = '';
             }
 
@@ -24,7 +25,7 @@ export class TransportFetch implements IRemoteTransport {
         const signal = timeoutSignal(timeout);
         return fetch(url.toString(), { method: 'POST', body, headers, signal })
             .catch((e: unknown) => {
-                throw new NetworkError((e as Error).message);
+                throw new NetworkError((e as Error).message, { cause: e });
             })
             .finally(() => signal.clear());
     }
