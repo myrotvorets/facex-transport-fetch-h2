@@ -2,7 +2,6 @@ import { type Response, fetch, timeoutSignal } from '@adobe/fetch';
 import { FaceXError, HttpError, type IRemoteTransport, NetworkError } from '@myrotvorets/facex-base';
 
 export class TransportFetch implements IRemoteTransport {
-    // eslint-disable-next-line class-methods-use-this
     public async post(url: URL, body: string, headers: Record<string, string>, timeout: number): Promise<string> {
         const r = await TransportFetch._fetch(url, body, headers, timeout);
 
